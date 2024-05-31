@@ -108,13 +108,21 @@ def main(values):
             "db_data": {}
         }
     }
-    with open('docker-compose.yml', 'w') as file:
-        yaml.dump(data, file, default_flow_style=False, sort_keys=False)
+
+    try:
+        with open('docker-compose.yml', 'w') as file:
+            yaml.dump(data, file, default_flow_style=False, sort_keys=False)
+        print("Archivo 'docker-compose.yml' generado con éxito.")
+    except Exception as e:
+        print(f"Error al generar el archivo YAML: {e}")
+    
 
     print("Archivo 'docker-compose.yml' generado con éxito.")
 
-    # Ejecutar `docker-compose up --build`
-    subprocess.run(["docker-compose", "up", "--build"])
+    try:
+        subprocess.run(["docker-compose", "up", "--build"], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error al ejecutar docker-compose: {e}")
 
 if __name__ == "__main__":
     app = PopupForm()
