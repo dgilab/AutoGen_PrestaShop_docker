@@ -1,15 +1,73 @@
+import tkinter as tk
+from tkinter import ttk
 import yaml
 import subprocess
 
-def main():
-    bd = input("Ingrese el nombre del contenedor para MySQL: ").strip()
-    presta = input("Ingrese el nombre del contenedor para PrestaShop: ").strip()
-    php = input("Ingrese el nombre del contenedor para PhpMyAdmin: ").strip()
-    dbuser = input("Ingrese el nombre de usuario para MySQL: ").strip()
-    dbpass = input(f"Ingrese la contraseña para el usuario {dbuser}: ").strip()
-    dbname = input("Ingrese el nombre de la Base de datos: ").strip()
-    hnps = input("Ingrese HostName para prestashop: ").strip()
-    hnphp = input("Ingrese HostName para PhPMyAdmin: ").strip()
+class PopupForm(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("Formulario Docker Compose")
+        self.geometry("400x600")
+
+        self.entries = {}
+        self.values = {}
+
+        self.create_widgets()
+
+    def create_widgets(self):
+        style = ttk.Style(self)
+        style.configure('TLabel', background='lightgrey', font=('Arial', 12))
+        style.configure('TEntry', font=('Arial', 12))
+        style.configure('TButton', font=('Arial', 12), background='lightblue', foreground='black')
+        # Definir etiquetas y entradas
+        fields = [
+            "Nombre del contenedor para MySQL",
+            "Nombre del contenedor para PrestaShop",
+            "Nombre del contenedor para PhpMyAdmin",
+            "Nombre de usuario para MySQL",
+            "Contraseña para el usuario de MySQL",
+            "Nombre de la Base de datos",
+            "HostName para PrestaShop",
+            "HostName para PhpMyAdmin"
+        ]
+        
+        for field in fields:
+            label = tk.Label(self, text=field + ":", font=('Arial', 12))
+            label.pack(pady=5, padx=20, fill='x')
+            entry = tk.Entry(self, font=('Arial', 12))
+            entry.pack(pady=5, padx=20, fill='x')
+            self.entries[field] = entry
+
+        # Botón de enviar
+        submit_button = tk.Button(self, text="Enviar", command=self.submit, font=('Arial', 12))
+        submit_button.pack(pady=15)
+
+    def submit(self):
+        # Obtener valores de las entradas
+        self.values['bd'] = self.entries["Nombre del contenedor para MySQL"].get()
+        self.values['presta'] = self.entries["Nombre del contenedor para PrestaShop"].get()
+        self.values['php'] = self.entries["Nombre del contenedor para PhpMyAdmin"].get()
+        self.values['dbuser'] = self.entries["Nombre de usuario para MySQL"].get()
+        self.values['dbpass'] = self.entries["Contraseña para el usuario MySQL"].get()
+        self.values['dbname'] = self.entries["Nombre de la Base de datos"].get()
+        self.values['hnps'] = self.entries["HostName para PrestaShop"].get()
+        self.values['hnphp'] = self.entries["HostName para PhpMyAdmin"].get()
+
+        # Llamar a la función main con los valores del formulario
+        self.destroy()
+        main(self.values)
+
+def main(values):
+    bd = values['bd']
+    presta = values['presta']
+    php = values['php']
+    dbuser = values['dbuser']
+    dbpass = values['dbpass']
+    dbname = values['dbname']
+    hnps = values['hnps']
+    hnphp = values['hnphp']
+
     data = {
         "version": "3",
         "services": {
@@ -59,4 +117,5 @@ def main():
     subprocess.run(["docker-compose", "up", "--build"])
 
 if __name__ == "__main__":
-    main()
+    app = PopupForm()
+    app.mainloop()
