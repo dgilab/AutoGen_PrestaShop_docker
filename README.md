@@ -8,6 +8,8 @@ Debes tener instalado python
 
 ## Instalación
 
+Principalmente es necesario tener instalado Docker en su sistema.
+
 Para instalar las dependencias necesarias, ejecuta el siguiente comando en tu terminal:
 
 ```bash
