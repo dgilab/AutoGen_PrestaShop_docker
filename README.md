@@ -4,7 +4,7 @@ Este generador utiliza Docker Compose para orquestar un conjunto de contenedores
 
 ## Dependencias
 
-Debes tener instalado python
+Debes tener instalado python y Docker
 
 ## Instalación
 
